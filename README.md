@@ -1,4 +1,4 @@
-HOW TO GET BLOCKTACTOE WORKING ON TESTRPC
+How to get BlockTacToe working on TestRPC
 =========================================
 
 Get local blockchain up:
