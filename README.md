@@ -91,3 +91,15 @@ Then run
 	npm run build
 
 And copy files to root directory
+
+
+
+
+
+
+
+
+
+
+
+https://codepen.io/gaearon/pen/LyyXgK?editors=0010
