@@ -14,6 +14,7 @@ contract mortal {
 contract contactStorage is mortal {
     
     bytes1[] public contacts;
+    bytes32 public winner;
 
     /* Save function */
     function addContacts(bytes1 _one, bytes1 _two, bytes1 _three, bytes1 _four, bytes1 _five, bytes1 _six, bytes1 _seven, bytes1 _eight, bytes1 _nine) public returns (bool success) {
@@ -21,8 +22,20 @@ contract contactStorage is mortal {
         return true;
     }
 
+    /* Save function */
+    function addWinner(bytes32 _winner) public returns (bool success) {
+        winner = _winner;
+        return true;
+    }
+
+    /* Retrieve function */
+    function getWinner() constant returns (bytes32) {
+        return winner;
+    }
+
     /* Retrieve function */
     function getContacts() constant returns (bytes1[]) {
         return contacts;
     }
+
 }

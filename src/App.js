@@ -9,6 +9,10 @@ const contactStorage = contract(ContactStorage)
       
 
 
+// function CreateGame() {
+//   const uuidv1 = require("uuid/v1");
+//   return uuidv1();
+// }
 
 class Board extends Component {
   constructor(props) {
@@ -18,6 +22,7 @@ class Board extends Component {
       web3: null,
       squares: Array(9).fill(""),
       xIsNext: true,
+      // uuid: ""
     };
   }
 
@@ -30,7 +35,25 @@ class Board extends Component {
 
       contactStorage.setProvider(this.state.web3.currentProvider)
     })
+    
+    // this.setUuid()
   }
+
+  // setUuid(){
+  //   var randomNumber = CreateGame()
+  //   console.log(randomNumber)
+  //   this.state.web3.eth.getAccounts((error, accounts) => {
+  //       contactStorage.deployed().then(instance => instance.addUuid(randomNumber, {from: this.state.web3.eth.accounts[0]}))     
+  //   })
+  // }
+
+  // getUuid(){
+  //     this.state.web3.eth.getAccounts((error, accounts) => {
+  //       contactStorage.deployed()
+  //                     .then(instance => instance.getUuid({from: this.state.web3.eth.accounts[0]}))
+  //                     .then(result => {console.log(result)})
+  //   })
+  // }
 
   get(){
       this.state.web3.eth.getAccounts((error, accounts) => {
@@ -49,25 +72,9 @@ class Board extends Component {
   }
 
 
-  calculateWinner(squares) {
-    const lines = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ];
-    for (let i = 0; i < lines.length; i++) {
-      const [a, b, c] = lines[i];
-      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-        return squares[a];
-      }
-    }
-    return null;
-  }
+  
+
+
 
 
   handleClick(i) {
@@ -95,19 +102,52 @@ class Board extends Component {
     );
   }
 
+
+
+  calculateWinner(squares) {
+    const lines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+    for (let i = 0; i < lines.length; i++) {
+      const [a, b, c] = lines[i];
+      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+        return squares[a];
+      }
+    }
+    return null;
+  }
+
+  setWinner(_winner){
+      var _squares = this.state.squares
+
+      this.state.web3.eth.getAccounts((error, accounts) => {
+        contactStorage.deployed().then(instance => instance.addWinner(_winner, {from: this.state.web3.eth.accounts[0]}))     
+    })
+  }
+
   render() {
     const winner = this.calculateWinner(this.state.squares);
     let status;
     if (winner) {
       status = 'Winner: ' + winner;
+      this.setWinner(status);
     } else {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
 
     return (
       <div className="game">
+
         <div className="game-board">
             <div>
+              <p>BLOCKTACKTOE</p>
               <div className="status">{status}</div>
               <div className="board-row">
                 {this.renderSquare(0)}
