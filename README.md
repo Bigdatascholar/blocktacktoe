@@ -7,7 +7,7 @@ Get local blockchain up:
 
 	node_modules/.bin/testrpc
 
-Open a new terminal tab with the Truffle console to push your contract to this local blockchain:
+Open a new terminal tab with the to deploy your contract to local blockchain:
 
 	truffle console
 
