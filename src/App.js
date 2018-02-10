@@ -13,11 +13,54 @@ const contactStorage = contract(ContactStorage)
 class Board extends Component {
   constructor(props) {
     super(props);
+    
     this.state = {
-      squares: Array(9).fill(null),
+      web3: null,
+      squares: Array(9).fill(""),
       xIsNext: true,
     };
+
   }
+
+  componentWillMount() {
+
+    getWeb3.then(results => {
+      this.setState({
+        web3: results.web3
+      })
+
+      contactStorage.setProvider(this.state.web3.currentProvider)
+    })
+  }
+
+  get(){
+      this.state.web3.eth.getAccounts((error, accounts) => {
+        contactStorage.deployed()
+                      .then(instance => instance.getContacts({from: this.state.web3.eth.accounts[0]}))
+                      .then(result => this.setState({squares: result.map(e => this.state.web3.toAscii(e)) }))
+    })
+  }
+
+  set(){
+      var _squares = this.state.squares
+      var _squareAscii = []
+      _squareAscii[0] = this.state.web3.fromAscii(_squares[0])
+      _squareAscii[1] = this.state.web3.fromAscii(_squares[1])
+      _squareAscii[2] = this.state.web3.fromAscii(_squares[2])
+      _squareAscii[3] = this.state.web3.fromAscii(_squares[3])
+      _squareAscii[4] = this.state.web3.fromAscii(_squares[4])
+      _squareAscii[5] = this.state.web3.fromAscii(_squares[5])
+      _squareAscii[6] = this.state.web3.fromAscii(_squares[6])
+      _squareAscii[7] = this.state.web3.fromAscii(_squares[7])
+      _squareAscii[8] = this.state.web3.fromAscii(_squares[8])
+      console.log(_squareAscii)
+      this.state.web3.eth.getAccounts((error, accounts) => {
+        contactStorage.deployed().then(instance => instance.addContacts(_squareAscii[0], _squareAscii[1], _squareAscii[2], _squareAscii[3], _squareAscii[4], _squareAscii[5], _squareAscii[6], _squareAscii[7], _squareAscii[8], {from: this.state.web3.eth.accounts[0]}))     
+
+    })
+
+  }
+
 
   calculateWinner(squares) {
     const lines = [
@@ -50,8 +93,11 @@ class Board extends Component {
       squares: squares,
       xIsNext: !this.state.xIsNext,
     });
-    console.log(this.state.squares[0])
+    
   }
+
+
+  
 
   renderSquare(i) {
     return (
@@ -72,42 +118,36 @@ class Board extends Component {
     }
 
     return (
-      <div>
-        <div className="status">{status}</div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    );
-  }
-}
-
-class Game extends React.Component {
-  render() {
-    return (
       <div className="game">
         <div className="game-board">
-          <Board />
+            <div>
+              <div className="status">{status}</div>
+              <div className="board-row">
+                {this.renderSquare(0)}
+                {this.renderSquare(1)}
+                {this.renderSquare(2)}
+              </div>
+              <div className="board-row">
+                {this.renderSquare(3)}
+                {this.renderSquare(4)}
+                {this.renderSquare(5)}
+              </div>
+              <div className="board-row">
+                {this.renderSquare(6)}
+                {this.renderSquare(7)}
+                {this.renderSquare(8)}
+              </div>
+            </div>
         </div>
         <div className="game-info">
-          <div>{/* status */}</div>
-          <ol>{/* TODO */}</ol>
+          <button onClick={this.set.bind(this)}>save game</button>
+          <button onClick={this.get.bind(this)}>load game</button>
         </div>
       </div>
     );
   }
 }
 
-export default Game
+
+
+export default Board

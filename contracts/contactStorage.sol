@@ -13,16 +13,16 @@ contract mortal {
 
 contract contactStorage is mortal {
     
-    bytes32[] public contacts = [bytes32('Your contacts:')];
+    bytes1[] public contacts;
 
     /* Save function */
-    function addContacts(bytes32 _newContact) public returns (bool success) {
-        contacts.push(_newContact);
+    function addContacts(bytes1 _one, bytes1 _two, bytes1 _three, bytes1 _four, bytes1 _five, bytes1 _six, bytes1 _seven, bytes1 _eight, bytes1 _nine) public returns (bool success) {
+        contacts = [_one, _two, _three, _four, _five, _six, _seven, _eight, _nine];
         return true;
     }
 
     /* Retrieve function */
-    function getContacts() constant returns (bytes32[]) {
+    function getContacts() constant returns (bytes1[]) {
         return contacts;
     }
 }
